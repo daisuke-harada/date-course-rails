@@ -32,6 +32,6 @@ Geocoder.configure(
     Geocoder::InvalidRequest,
     Geocoder::InvalidApiKey
   ],
-  api_key: Rails.application.credentials[:GOOGLE_MAP_API_KEY],
+  api_key: ENV['GOOGLE_MAP_API_KEY'] || Rails.application.credentials[:google_map_api_key],
   use_https: true
 )
