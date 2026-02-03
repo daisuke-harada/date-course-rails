@@ -17,7 +17,7 @@ ActiveRecord::Schema[7.1].define(version: 2022_03_31_082535) do
   create_table "addresses", force: :cascade do |t|
     t.integer "prefecture_id"
     t.integer "date_spot_id"
-    t.string "city_name"
+    t.string "city_name", null: false
     t.float "latitude"
     t.float "longitude"
     t.datetime "created_at", null: false
@@ -38,17 +38,18 @@ ActiveRecord::Schema[7.1].define(version: 2022_03_31_082535) do
   create_table "date_spot_reviews", force: :cascade do |t|
     t.float "rate"
     t.text "content"
-    t.bigint "user_id"
-    t.bigint "date_spot_id"
+    t.bigint "user_id", null: false
+    t.bigint "date_spot_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["date_spot_id"], name: "index_date_spot_reviews_on_date_spot_id"
+    t.index ["user_id", "date_spot_id"], name: "index_date_spot_reviews_on_user_id_and_date_spot_id", unique: true
     t.index ["user_id"], name: "index_date_spot_reviews_on_user_id"
   end
 
   create_table "date_spots", force: :cascade do |t|
     t.integer "genre_id"
-    t.string "name"
+    t.string "name", null: false
     t.string "image"
     t.datetime "opening_time", precision: nil
     t.datetime "closing_time", precision: nil
@@ -76,9 +77,9 @@ ActiveRecord::Schema[7.1].define(version: 2022_03_31_082535) do
   end
 
   create_table "users", force: :cascade do |t|
-    t.string "name"
-    t.string "email"
-    t.string "gender"
+    t.string "name", null: false
+    t.string "email", null: false
+    t.string "gender", null: false
     t.string "image"
     t.boolean "admin", default: false
     t.string "password_digest"

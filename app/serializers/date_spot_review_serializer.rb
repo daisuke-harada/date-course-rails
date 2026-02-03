@@ -7,13 +7,14 @@
 #  rate         :float
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
-#  date_spot_id :bigint
-#  user_id      :bigint
+#  date_spot_id :bigint           not null
+#  user_id      :bigint           not null
 #
 # Indexes
 #
-#  index_date_spot_reviews_on_date_spot_id  (date_spot_id)
-#  index_date_spot_reviews_on_user_id       (user_id)
+#  index_date_spot_reviews_on_date_spot_id              (date_spot_id)
+#  index_date_spot_reviews_on_user_id                   (user_id)
+#  index_date_spot_reviews_on_user_id_and_date_spot_id  (user_id,date_spot_id) UNIQUE
 #
 # Foreign Keys
 #

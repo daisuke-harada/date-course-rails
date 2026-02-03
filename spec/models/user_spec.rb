@@ -4,10 +4,10 @@
 #
 #  id              :bigint           not null, primary key
 #  admin           :boolean          default(FALSE)
-#  email           :string
-#  gender          :string
+#  email           :string           not null
+#  gender          :string           not null
 #  image           :string
-#  name            :string
+#  name            :string           not null
 #  password_digest :string
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null

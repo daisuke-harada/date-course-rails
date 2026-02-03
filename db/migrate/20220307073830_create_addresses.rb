@@ -3,7 +3,7 @@ class CreateAddresses < ActiveRecord::Migration[6.1]
     create_table :addresses do |t|
       t.integer :prefecture_id, foreign_key: true
       t.integer :date_spot_id, foreign_key: true
-      t.string :city_name
+      t.string :city_name, null: false
       t.float :latitude
       t.float :longitude
       t.timestamps

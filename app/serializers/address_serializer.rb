@@ -3,7 +3,7 @@
 # Table name: addresses
 #
 #  id            :bigint           not null, primary key
-#  city_name     :string
+#  city_name     :string           not null
 #  latitude      :float
 #  longitude     :float
 #  created_at    :datetime         not null

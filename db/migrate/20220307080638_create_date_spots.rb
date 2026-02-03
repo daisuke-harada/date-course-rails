@@ -2,7 +2,7 @@ class CreateDateSpots < ActiveRecord::Migration[6.1]
   def change
     create_table :date_spots do |t|
       t.integer :genre_id, foreign_key: true
-      t.string :name
+      t.string :name, null: false
       t.string :image
       t.datetime :opening_time
       t.datetime :closing_time

@@ -5,7 +5,7 @@
 #  id           :bigint           not null, primary key
 #  closing_time :datetime
 #  image        :string
-#  name         :string
+#  name         :string           not null
 #  opening_time :datetime
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
