@@ -27,3 +27,6 @@
 /config/master.key
 
 /public/uploads/*
+
+# Local direnv environment file (contains secrets)
+.envrc
