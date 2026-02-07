@@ -2,10 +2,12 @@ name: ci-workflow
 on:
   pull_request:
     types: [opened, reopened, synchronize]
+  push:
+    branches: [main]
 env:
   RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
 jobs:
-  ails_test:
+  rails_test:
     runs-on: ubuntu-latest
     services:
       db:
