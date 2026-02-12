@@ -14,7 +14,7 @@ services:
     build:
       dockerfile: Dockerfile.develop
     environment:
-      FRONTEND_DOMAIN: ${FRONTEND_DOMAIN}
+      REACT_FRONTEND_DOMAIN: ${REACT_FRONTEND_DOMAIN}
       GOOGLE_MAP_API_KEY: ${GOOGLE_MAP_API_KEY}
       POSTGRES_HOST: ${POSTGRES_HOST}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}

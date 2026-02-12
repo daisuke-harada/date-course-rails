@@ -7,7 +7,7 @@
 
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
   allow do
-    origins [ENV["FRONTEND_DOMAIN"], "http://localhost:8080"].compact
+    origins [ENV["REACT_FRONTEND_DOMAIN"], "http://localhost:8080"].compact
 
     resource "*",
       headers: :any,
