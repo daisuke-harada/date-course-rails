@@ -3,19 +3,18 @@ class Api::V1::DateSpotsController < ApplicationController
 
   def index
     if params[:date_spot_name].present? || params[:prefecture_id].present? || params[:genre_id].present? || params[:come_time].present?
-      date_spots = DateSpot.includes(:address, :date_spot_reviews).ransack(
+      date_spots = DateSpot.includes(:date_spot_reviews).ransack(
         name_cont: params[:date_spot_name],
-        address_prefecture_id_eq: params[:prefecture_id],
+        prefecture_id_eq: params[:prefecture_id],
         genre_id_eq: params[:genre_id],
         opening_time_lteq: params[:come_time],
         closing_time_gteq: params[:come_time]
       ).result
 
-      # map to address serializer and deduplicate by address id
-      address_and_date_spots = date_spots.map { |date_spot| AddressSerializer.new(date_spot.address).serializable_hash }
+      address_and_date_spots = date_spots.map { |date_spot| AddressSerializer.new(date_spot).serializable_hash }
     else
-      address_and_date_spots = Address.includes(date_spot: :date_spot_reviews).map do |address|
-        AddressSerializer.new(address).serializable_hash
+      address_and_date_spots = DateSpot.includes(:date_spot_reviews).map do |date_spot|
+        AddressSerializer.new(date_spot).serializable_hash
       end
     end
 
@@ -23,11 +22,10 @@ class Api::V1::DateSpotsController < ApplicationController
   end
 
   def show
-    address = @date_spot.address
     date_spot_reviews = @date_spot.date_spot_reviews.includes(:user, :date_spot).map { |date_spot_review| DateSpotReviewSerializer.new(date_spot_review, include_user_info: true).attributes }
 
     render status: :ok, json: {
-      address_and_date_spot: AddressSerializer.new(address),
+      address_and_date_spot: AddressSerializer.new(@date_spot),
       review_average_rate: @date_spot.average_rate_calculation,
       date_spot_reviews: date_spot_reviews
     }

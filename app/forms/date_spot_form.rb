@@ -9,7 +9,6 @@ class DateSpotForm
     return false unless valid?
     ActiveRecord::Base.transaction do
       @date_spot = DateSpot.new(date_spot_attributes)
-      @date_spot.build_address(address_attributes)
       @date_spot.save!
     end
     @date_spot
@@ -22,7 +21,6 @@ class DateSpotForm
 
     ActiveRecord::Base.transaction do
       date_spot.update!(date_spot_attributes)
-      date_spot.address.update!(address_attributes)
     end
 
     true
@@ -38,12 +36,7 @@ class DateSpotForm
       genre_id: genre_id,
       opening_time: opening_time,
       closing_time: closing_time,
-      image: image
-    }
-  end
-
-  def address_attributes
-    {
+      image: image,
       prefecture_id: prefecture_id,
       city_name: city_name
     }

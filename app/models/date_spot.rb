@@ -19,22 +19,28 @@ class DateSpot < ApplicationRecord
   mount_uploader :image, ImageUploader
   extend ActiveHash::Associations::ActiveRecordExtensions
   belongs_to :genre
-  has_one :address, dependent: :destroy
-  accepts_nested_attributes_for :address
+  belongs_to_active_hash :prefecture
   has_many :date_spot_reviews, dependent: :destroy
   has_many :during_spots, dependent: :destroy
   has_many :courses, through: :during_spots
 
+  delegate :name, to: :prefecture, prefix: true
+
+  geocoded_by :city_name
+  after_validation :geocode, if: :city_name_changed?
+
   validates :name, presence: true
   validates :genre_id, presence: true
+  validates :city_name, presence: true
+  validates :prefecture_id, presence: true
 
   # ransackに必要な定義
   def self.ransackable_attributes(auth_object = nil)
-    ["closing_time", "created_at", "genre_id", "id", "image", "name", "opening_time", "updated_at"]
+    ["city_name", "closing_time", "created_at", "genre_id", "id", "image", "latitude", "longitude", "name", "opening_time", "prefecture_id", "updated_at"]
   end
 
   def self.ransackable_associations(auth_object = nil)
-    ["address", "date_spot_reviews", "during_spots", "genre"]
+    ["date_spot_reviews", "during_spots", "genre"]
   end
 
   # date_spot_reviewの評価の平均値を計算する
