@@ -2,8 +2,8 @@ require "rails_helper"
 
 RSpec.describe "Api::V1::Homes", type: :request do
   describe "GET /top" do
-    let!(:date_spot) { create(:address).date_spot }
-    let!(:other_spot) { create(:other_address).date_spot }
+    let!(:date_spot) { create(:date_spot) }
+    let!(:other_spot) { create(:other_spot) }
 
     it "topページを表示する" do
       get "/api/v1/top"

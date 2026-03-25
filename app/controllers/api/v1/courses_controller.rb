@@ -3,10 +3,10 @@ class Api::V1::CoursesController < ApplicationController
 
   def index
     if params[:prefecture_id].present?
-      course_ids = DuringSpot.includes(date_spot: :address).ransack(date_spot_address_prefecture_id_eq: params[:prefecture_id]).result.pluck(:course_id).uniq
-      courses = Course.includes(date_spots: {address: {date_spot: :date_spot_reviews}}, user: [:followers, :followings]).where(id: course_ids).where(authority: "公開")
+      course_ids = DuringSpot.includes(:date_spot).ransack(date_spot_prefecture_id_eq: params[:prefecture_id]).result.pluck(:course_id).uniq
+      courses = Course.includes(date_spots: :date_spot_reviews, user: [:followers, :followings]).where(id: course_ids).where(authority: "公開")
     else
-      courses = Course.includes(date_spots: {address: {date_spot: :date_spot_reviews}}, user: [:followers, :followings]).where(authority: "公開")
+      courses = Course.includes(date_spots: :date_spot_reviews, user: [:followers, :followings]).where(authority: "公開")
     end
 
     render status: :ok, json: courses
@@ -37,6 +37,6 @@ class Api::V1::CoursesController < ApplicationController
   end
 
   def set_course
-    @course = Course.includes(date_spots: {address: {date_spot: :date_spot_reviews}}, user: [:followers, :followings]).find(params[:id])
+    @course = Course.includes(date_spots: :date_spot_reviews, user: [:followers, :followings]).find(params[:id])
   end
 end

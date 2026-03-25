@@ -16,7 +16,6 @@
 #  index_date_spots_on_genre_id_and_created_at  (genre_id,created_at)
 #
 class DateSpotSerializer < ActiveModel::Serializer
-  has_one :address
   has_many :date_spot_reviews
   has_many :courses
 

@@ -34,18 +34,13 @@ class CourseSerializer < ActiveModel::Serializer
   end
 
   attribute :date_spots do
-    # object.date_spots.includes(:date_spot_reviews, :address).map do |date_spot|
-    #   AddressSerializer.new(date_spot.address)
-    # end
     object.date_spots.map do |date_spot|
-      AddressSerializer.new(date_spot.address)
+      AddressSerializer.new(date_spot)
     end
   end
 
   attribute :no_duplicate_prefecture_names do
-    # during_spots を通じて date_spots にアクセス
-    prefecture_ids = object.date_spots.map { |date_spot| date_spot.address.prefecture_id }.uniq
-    # 県名の重複をなくして返す
+    prefecture_ids = object.date_spots.map { |date_spot| date_spot.prefecture_id }.uniq
     Prefecture.where(id: prefecture_ids).pluck(:name).uniq
   end
 end
