@@ -29,8 +29,9 @@ end
 
 # すべてのユーザーにランダムに5つレビューを投稿してもらう
 User.non_admins.each do |user|
-  5.times do
-    date_spot_review_create(rates.sample, "test" * 18, user.id, Address.find(rand(1..38)).date_spot_id)
+  # 同じユーザーで date_spot_id が重複しないよう5件をサンプリング
+  DateSpot.pluck(:id).sample(5).each do |ds_id|
+    date_spot_review_create(rates.sample, "test" * 18, user.id, ds_id)
   end
 end
 
