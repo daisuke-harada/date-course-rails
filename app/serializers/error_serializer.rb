@@ -1,5 +1,5 @@
 class ErrorSerializer < ActiveModel::Serializer
   attribute :error_messages do
-    object.errors.messages
+    object.errors.full_messages
   end
 end

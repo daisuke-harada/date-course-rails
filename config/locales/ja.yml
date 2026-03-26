@@ -1,0 +1,48 @@
+ja:
+  activerecord:
+    models:
+      user: "ユーザー"
+      date_spot: "デートスポット"
+      date_spot_review: "レビュー"
+      course: "コース"
+      relationship: "フォロー"
+    attributes:
+      user:
+        name: "名前"
+        email: "メールアドレス"
+        password: "パスワード"
+        gender: "性別"
+      date_spot:
+        name: "名前"
+        genre_id: "ジャンル"
+        city_name: "市町村名・番地"
+        prefecture_id: "都道府県"
+      date_spot_review:
+        content: "コメント"
+        user_id: "ユーザー"
+        date_spot_id: "デートスポット"
+      course:
+        user_id: "ユーザー"
+        authority: "公開設定"
+        travel_mode: "移動手段"
+        date_spots: "デートスポット"
+  activemodel:
+    attributes:
+      date_spot_form:
+        name: "名前"
+        genre_id: "ジャンル"
+        city_name: "市町村名・番地"
+        prefecture_id: "都道府県"
+      course_form:
+        user_id: "ユーザー"
+        authority: "公開設定"
+        travel_mode: "移動手段"
+        date_spots: "デートスポット"
+  errors:
+    messages:
+      blank: "を入力してください"
+      taken: "はすでに使用されています"
+      too_long: "は%{count}文字以内で入力してください"
+      too_short: "は%{count}文字以上で入力してください"
+      invalid: "は正しい形式で入力してください"
+      not_a_number: "は数値で入力してください"
