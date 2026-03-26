@@ -19,8 +19,11 @@ class Api::V1::UsersController < ApplicationController
   end
 
   def destroy
-    @user.destroy
-    render status: :no_content
+    if @user.destroy
+      render status: :no_content
+    else
+      render status: :unprocessable_entity, json: {error_messages: @user.errors.full_messages}
+    end
   end
 
   private
