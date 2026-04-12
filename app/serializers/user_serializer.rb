@@ -25,7 +25,25 @@ class UserSerializer < ActiveModel::Serializer
   end
 
   attribute :date_spot_reviews do
-    object.date_spot_reviews.map { |review| {id: review.id, rate: review.rate, content: review.content, date_spot: review.date_spot} }
+    object.date_spot_reviews.includes(:date_spot).map do |review|
+      spot = review.date_spot
+      {
+        id: review.id,
+        rate: review.rate,
+        content: review.content,
+        date_spot: {
+          id: spot.id,
+          name: spot.name,
+          city_name: spot.city_name,
+          latitude: spot.latitude,
+          longitude: spot.longitude,
+          opening_time: spot.opening_time,
+          closing_time: spot.closing_time,
+          genre_id: spot.genre_id,
+          image: { url: spot.image.url }
+        }
+      }
+    end
   end
 
   attribute :followerIds do
