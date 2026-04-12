@@ -35,7 +35,7 @@ class CourseSerializer < ActiveModel::Serializer
 
   attribute :date_spots do
     object.date_spots.map do |date_spot|
-      AddressSerializer.new(date_spot)
+      DateSpotSerializer.new(date_spot)
     end
   end
 

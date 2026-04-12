@@ -5,7 +5,7 @@ class Api::V1::HomesController < ApplicationController
       main_prefectures: Prefecture.majors,
       main_genres: Genre.majors,
       genres: Genre.all,
-      address_and_date_spots: DateSpot.includes(:date_spot_reviews).all.map { |date_spot| AddressSerializer.new(date_spot) }
+      address_and_date_spots: DateSpot.includes(:date_spot_reviews).all.map { |date_spot| DateSpotSerializer.new(date_spot) }
     }
   end
 end

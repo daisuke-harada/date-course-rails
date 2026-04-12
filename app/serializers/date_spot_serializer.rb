@@ -21,16 +21,27 @@
 #  index_date_spots_on_prefecture_id_and_created_at  (prefecture_id,created_at)
 #
 class DateSpotSerializer < ActiveModel::Serializer
-  has_many :date_spot_reviews
-  has_many :courses
+  attributes :id, :name, :genre_id, :opening_time, :closing_time,
+             :created_at, :updated_at,
+             :city_name, :latitude, :longitude
 
-  attributes :id, :name, :image, :closing_time, :opening_time, :created_at, :updated_at
+  attribute :image do
+    { url: object.image.url }
+  end
+
+  attribute :prefecture_name do
+    object.prefecture_name
+  end
+
+  attribute :genre_name do
+    object.genre.name
+  end
+
+  attribute :review_total_number do
+    object.date_spot_reviews.size
+  end
 
   attribute :average_rate do
     object.average_rate_calculation
-  end
-
-  attribute :genre_id do
-    object.genre_id
   end
 end
