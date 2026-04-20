@@ -1,4 +1,6 @@
 class Api::V1::RelationshipsController < ApplicationController
+  before_action :authenticate_user!
+
   def create
     current_user = User.includes(date_spot_reviews: :date_spot, courses: {date_spots: :date_spot_reviews}).find(params[:current_user_id])
     followed_user = User.includes(date_spot_reviews: :date_spot, courses: {date_spots: :date_spot_reviews}).find(params[:followed_user_id])
