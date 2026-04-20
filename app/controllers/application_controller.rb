@@ -23,4 +23,27 @@ class ApplicationController < ActionController::API
   rescue_from StandardError do |e|
     render status: :internal_server_error, json: {error_messages: [e.message]}
   end
+
+  private
+
+  # Authorization: Bearer <token> ヘッダーを検証し、@current_user をセットする
+  # 認証が必要なアクションで before_action :authenticate_user! として使用する
+  def authenticate_user!
+    header = request.headers["Authorization"]
+    token = header&.split(" ")&.last
+    begin
+      decoded = JsonWebToken.decode(token)
+      @current_user = User.find(decoded[:user_id])
+    rescue JWT::ExpiredSignature
+      render status: :unauthorized, json: {error_messages: ["トークンの有効期限が切れています。再度ログインしてください。"]}
+    rescue JWT::DecodeError
+      render status: :unauthorized, json: {error_messages: ["認証に失敗しました。"]}
+    rescue ActiveRecord::RecordNotFound
+      render status: :unauthorized, json: {error_messages: ["ユーザーが見つかりません。"]}
+    end
+  end
+
+  def current_user
+    @current_user
+  end
 end
