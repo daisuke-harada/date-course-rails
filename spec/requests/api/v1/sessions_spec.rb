@@ -4,14 +4,14 @@ RSpec.describe "Api::V1::Sessions", type: :request do
   describe "POST /login" do
     let!(:user) { create(:user) }
 
-    it "ユーザーのログインに成功する" do
+    it "ユーザーのログインに成功し、JWT トークンが返る" do
       post "/api/v1/login", params: {sign_in_params: {name: user.name, password: user.password}}
       expect(response.status).to eq(200)
-      expect(JSON.parse(response.body)["id"]).to eq(user.id)
-      expect(JSON.parse(response.body)["name"]).to eq(user.name)
-      expect(JSON.parse(response.body)["email"]).to eq(user.email)
-      expect(JSON.parse(response.body)["gender"]).to eq(user.gender)
-      expect(JSON.parse(response.body)["admin"]).to eq(user.admin)
+      json = JSON.parse(response.body)
+      expect(json["user"]["id"]).to eq(user.id)
+      expect(json["user"]["name"]).to eq(user.name)
+      expect(json["user"]["email"]).to eq(user.email)
+      expect(json["token"]).to be_present
     end
 
     it "ユーザーのログインに失敗する" do
