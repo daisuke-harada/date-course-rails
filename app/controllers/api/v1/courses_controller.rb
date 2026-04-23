@@ -1,4 +1,5 @@
 class Api::V1::CoursesController < ApplicationController
+  before_action :authenticate_user!, only: %i[create destroy]
   before_action :set_course, only: %i[show destroy]
 
   def index
