@@ -1,36 +1,61 @@
-name: ci-workflow
+name: CI
+
 on:
   pull_request:
     types: [opened, reopened, synchronize]
   push:
     branches: [main]
+
 env:
+  RAILS_ENV: test
   RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
+
 jobs:
-  rails_test:
+  ci:
     runs-on: ubuntu-latest
+
     services:
       db:
         image: postgres:13
         env:
+          POSTGRES_USER: postgres
           POSTGRES_PASSWORD: password
         ports:
           - "5432:5432"
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
     container:
       image: ruby:3.3.0
+
     steps:
-      - uses: actions/checkout@v2
-      - name: setup
+      - uses: actions/checkout@v4
+
+      - name: Install system dependencies
+        run: apt-get update -qq && apt-get install -y build-essential libpq-dev
+
+      - name: Cache gems
+        uses: actions/cache@v4
+        with:
+          path: vendor/bundle
+          key: gems-${{ hashFiles('Gemfile.lock') }}
+          restore-keys: gems-
+
+      - name: Install gems
         run: |
-          gem install bundler
-          bundle install
-      - name: setup migrate
+          bundle config set --local path vendor/bundle
+          bundle install --jobs 4 --retry 3
+
+      - name: Setup database
         run: |
-          rails db:create
-          rails db:migrate
-      - name: run standardrb
-        run: |
-          standardrb
-      - name: run rspec
-        run: |
-          rspec
+          bundle exec rails db:create
+          bundle exec rails db:migrate
+
+      - name: Run StandardRB
+        run: bundle exec standardrb
+
+      - name: Run RSpec
+        run: bundle exec rspec
