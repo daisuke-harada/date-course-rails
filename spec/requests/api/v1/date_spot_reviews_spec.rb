@@ -34,8 +34,8 @@ RSpec.describe "Api::V1::DateSpotReviews", type: :request do
         }
       }, headers: auth_headers(user)
       expect(response.status).to eq(422)
-      expect(JSON.parse(response.body)["error_messages"]["user_id"]).to eq(["を入力してください"])
-      expect(JSON.parse(response.body)["error_messages"]["date_spot_id"]).to eq(["を入力してください"])
+      expect(JSON.parse(response.body)["error_messages"]).to include("ユーザーを入力してください")
+      expect(JSON.parse(response.body)["error_messages"]).to include("デートスポットを入力してください")
     end
 
     it "未認証の場合は 401 を返す" do
@@ -80,7 +80,7 @@ RSpec.describe "Api::V1::DateSpotReviews", type: :request do
         }
       }, headers: auth_headers(auth_user)
       expect(response.status).to eq(422)
-      expect(JSON.parse(response.body)["error_messages"]["content"]).to eq(["は75文字以内で入力してください"])
+      expect(JSON.parse(response.body)["error_messages"]).to include("コメントは75文字以内で入力してください")
     end
 
     it "未認証の場合は 401 を返す" do

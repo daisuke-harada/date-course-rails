@@ -22,11 +22,11 @@
 #
 class DateSpotSerializer < ActiveModel::Serializer
   attributes :id, :name, :genre_id, :opening_time, :closing_time,
-             :created_at, :updated_at,
-             :city_name, :latitude, :longitude
+    :created_at, :updated_at,
+    :city_name, :latitude, :longitude
 
   attribute :image do
-    { url: object.image.url }
+    {url: object.image.url}
   end
 
   attribute :prefecture_name do

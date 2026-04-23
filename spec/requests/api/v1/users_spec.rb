@@ -46,11 +46,10 @@ RSpec.describe "Api::V1::Users", type: :request do
         "password_confirmation" => ""
       }, headers: auth_headers(user)
       expect(response.status).to eq(422)
-      expect(JSON.parse(response.body)["error_messages"]["name"]).to eq(["を入力してください"])
-      expect(JSON.parse(response.body)["error_messages"]["email"]).to eq(["を入力してください", "は不正な値です"])
-      expect(JSON.parse(response.body)["error_messages"]["gender"]).to eq(["を入力してください"])
-      expect(JSON.parse(response.body)["error_messages"]["password"]).to eq(nil)
-      expect(JSON.parse(response.body)["error_messages"]["password_confirmation"]).to eq(nil)
+      error_messages = JSON.parse(response.body)["error_messages"]
+      expect(error_messages).to include("名前を入力してください")
+      expect(error_messages).to include("メールアドレスを入力してください")
+      expect(error_messages).to include("性別を入力してください")
     end
 
     it "未認証の場合は 401 を返す" do

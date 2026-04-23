@@ -4,7 +4,7 @@ module JwtHelpers
   end
 
   def auth_headers(user)
-    { "Authorization" => "Bearer #{jwt_token(user)}" }
+    {"Authorization" => "Bearer #{jwt_token(user)}"}
   end
 end
 

@@ -40,7 +40,7 @@ class UserSerializer < ActiveModel::Serializer
           opening_time: spot.opening_time,
           closing_time: spot.closing_time,
           genre_id: spot.genre_id,
-          image: { url: spot.image.url }
+          image: {url: spot.image.url}
         }
       }
     end

@@ -64,7 +64,7 @@ RSpec.describe User, type: :model do
       it "すでに登録されている名前は保存できないこと" do
         create(:user)
         user.valid?
-        expect(user.errors[:name]).to include("はすでに存在します")
+        expect(user.errors[:name]).to include("はすでに使用されています")
       end
 
       it "メールアドレスが入力されていなければ保存できないこと" do
@@ -82,7 +82,7 @@ RSpec.describe User, type: :model do
       it "すでに登録されているメールアドレスは保存できないこと" do
         create(:user)
         user.valid?
-        expect(user.errors[:email]).to include("はすでに存在します")
+        expect(user.errors[:email]).to include("はすでに使用されています")
       end
 
       it "性別が入力されていなければ保存できないこと" do
