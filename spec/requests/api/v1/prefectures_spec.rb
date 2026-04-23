@@ -6,8 +6,8 @@ RSpec.describe "Api::V1::Prefectures", type: :request do
 
     it "prevectureのidが40のデートスポットを表示する" do
       get "/api/v1/prefectures/40"
-      expect(JSON.parse(response.body)[0]["date_spot"]["name"]).to eq(date_spot.name)
-      expect(JSON.parse(response.body)[0]["date_spot"]["genre_id"]).to eq(date_spot.genre_id)
+      expect(JSON.parse(response.body)[0]["name"]).to eq(date_spot.name)
+      expect(JSON.parse(response.body)[0]["genre_id"]).to eq(date_spot.genre_id)
       expect(JSON.parse(response.body)[0]["prefecture_name"]).to eq(date_spot.prefecture.name)
       expect(JSON.parse(response.body)[0]["city_name"]).to eq(date_spot.city_name)
       expect(JSON.parse(response.body)[0]["genre_name"]).to eq(Genre.find_by(id: date_spot.genre_id).name)

@@ -48,8 +48,8 @@ RSpec.describe "Api::V1::Homes", type: :request do
       expect(JSON.parse(response.body)["main_prefectures"]).to eq(main_prefectures)
       expect(JSON.parse(response.body)["main_genres"]).to eq(main_genres)
       expect(JSON.parse(response.body)["genres"]).to eq(genres)
-      expect(JSON.parse(response.body)["address_and_date_spots"][0]["date_spot"]["name"]).to eq(date_spot.name)
-      expect(JSON.parse(response.body)["address_and_date_spots"][1]["date_spot"]["name"]).to eq(other_spot.name)
+      expect(JSON.parse(response.body)["date_spots"][0]["name"]).to eq(date_spot.name)
+      expect(JSON.parse(response.body)["date_spots"][1]["name"]).to eq(other_spot.name)
     end
   end
 end

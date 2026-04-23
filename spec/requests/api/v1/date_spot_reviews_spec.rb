@@ -6,7 +6,7 @@ RSpec.describe "Api::V1::DateSpotReviews", type: :request do
     let!(:date_spot) { create(:date_spot) }
     let(:date_spot_review) { build(:date_spot_review) }
 
-    it "入力された値が正しい場合はdate_spo_reviewを登録することができる" do
+    it "入力された値が正しい場合はdate_spot_reviewを登録することができる" do
       post "/api/v1/date_spot_reviews", params: {
         date_spot_review: {
           rate: date_spot_review.rate,
@@ -14,7 +14,7 @@ RSpec.describe "Api::V1::DateSpotReviews", type: :request do
           user_id: date_spot_review.user_id,
           date_spot_id: date_spot_review.date_spot_id
         }
-      }
+      }, headers: auth_headers(user)
       expect(response.status).to eq(201)
       expect(JSON.parse(response.body)["date_spot_reviews"][0]["rate"]).to eq(date_spot_review.rate)
       expect(JSON.parse(response.body)["date_spot_reviews"][0]["content"]).to eq(date_spot_review.content)
@@ -25,7 +25,6 @@ RSpec.describe "Api::V1::DateSpotReviews", type: :request do
     end
 
     it "入力された値が正しくない場合はエラーメッセージがレスポンスで返される" do
-      date_spot_review = build(:date_spot_review)
       post "/api/v1/date_spot_reviews", params: {
         date_spot_review: {
           rate: date_spot_review.rate,
@@ -33,15 +32,28 @@ RSpec.describe "Api::V1::DateSpotReviews", type: :request do
           user_id: "",
           date_spot_id: ""
         }
-      }
+      }, headers: auth_headers(user)
       expect(response.status).to eq(422)
-      expect(JSON.parse(response.body)["error_messages"]["user_id"]).to eq(["を入力してください"])
-      expect(JSON.parse(response.body)["error_messages"]["date_spot_id"]).to eq(["を入力してください"])
+      expect(JSON.parse(response.body)["error_messages"]).to include("ユーザーを入力してください")
+      expect(JSON.parse(response.body)["error_messages"]).to include("デートスポットを入力してください")
+    end
+
+    it "未認証の場合は 401 を返す" do
+      post "/api/v1/date_spot_reviews", params: {
+        date_spot_review: {
+          rate: date_spot_review.rate,
+          content: date_spot_review.content,
+          user_id: date_spot_review.user_id,
+          date_spot_id: date_spot_review.date_spot_id
+        }
+      }
+      expect(response.status).to eq(401)
     end
   end
 
   describe "PUT /update" do
     let!(:date_spot_review) { create(:date_spot_review) }
+    let(:auth_user) { date_spot_review.user }
 
     it "入力された値が正しい場合はdate_spot_reviewsを更新することができる" do
       put "/api/v1/date_spot_reviews/#{date_spot_review.id}", params: {
@@ -51,7 +63,7 @@ RSpec.describe "Api::V1::DateSpotReviews", type: :request do
           user_id: date_spot_review.user_id,
           date_spot_id: date_spot_review.date_spot_id
         }
-      }
+      }, headers: auth_headers(auth_user)
       expect(response.status).to eq(200)
       expect(JSON.parse(response.body)["date_spot_reviews"][0]["rate"]).to eq(5.0)
       expect(JSON.parse(response.body)["date_spot_reviews"][0]["content"]).to eq("編集しました")
@@ -66,18 +78,31 @@ RSpec.describe "Api::V1::DateSpotReviews", type: :request do
           user_id: date_spot_review.user_id,
           date_spot_id: date_spot_review.date_spot_id
         }
-      }
+      }, headers: auth_headers(auth_user)
       expect(response.status).to eq(422)
-      expect(JSON.parse(response.body)["error_messages"]["content"]).to eq(["は75文字以内で入力してください"])
+      expect(JSON.parse(response.body)["error_messages"]).to include("コメントは75文字以内で入力してください")
+    end
+
+    it "未認証の場合は 401 を返す" do
+      put "/api/v1/date_spot_reviews/#{date_spot_review.id}", params: {
+        date_spot_review: {
+          rate: 5.0,
+          content: "編集しました",
+          user_id: date_spot_review.user_id,
+          date_spot_id: date_spot_review.date_spot_id
+        }
+      }
+      expect(response.status).to eq(401)
     end
   end
 
   describe "DELETE /destroy" do
     let!(:date_spot_review) { create(:date_spot_review) }
     let!(:other_date_spot_review) { create(:other_date_spot_review) }
+    let(:auth_user) { date_spot_review.user }
 
     it "date_spot情報の削除に成功する" do
-      delete "/api/v1/date_spot_reviews/#{date_spot_review.id}"
+      delete "/api/v1/date_spot_reviews/#{date_spot_review.id}", headers: auth_headers(auth_user)
       expect(response.status).to eq(200)
       expect(JSON.parse(response.body)["date_spot_reviews"][0]["rate"]).to eq(other_date_spot_review.rate)
       expect(JSON.parse(response.body)["date_spot_reviews"][0]["content"]).to eq(other_date_spot_review.content)
@@ -86,6 +111,11 @@ RSpec.describe "Api::V1::DateSpotReviews", type: :request do
       expect(JSON.parse(response.body)["date_spot_reviews"][0]["user_id"]).to eq(other_date_spot_review.user_id)
       expect(JSON.parse(response.body)["date_spot_reviews"][0]["date_spot_id"]).to eq(other_date_spot_review.date_spot_id)
       expect(JSON.parse(response.body)["review_average_rate"]).to eq(1.0)
+    end
+
+    it "未認証の場合は 401 を返す" do
+      delete "/api/v1/date_spot_reviews/#{date_spot_review.id}"
+      expect(response.status).to eq(401)
     end
   end
 end

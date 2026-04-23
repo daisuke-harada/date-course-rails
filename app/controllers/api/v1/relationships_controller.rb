@@ -1,8 +1,10 @@
 class Api::V1::RelationshipsController < ApplicationController
+  before_action :authenticate_user!
+
   def create
-    current_user = User.includes(date_spot_reviews: :date_spot, courses: {date_spots: :date_spot_reviews}).find(params[:current_user_id])
+    acting_user = User.includes(date_spot_reviews: :date_spot, courses: {date_spots: :date_spot_reviews}).find(params[:current_user_id])
     followed_user = User.includes(date_spot_reviews: :date_spot, courses: {date_spots: :date_spot_reviews}).find(params[:followed_user_id])
-    following = current_user.follow(followed_user)
+    following = acting_user.follow(followed_user)
 
     if following.nil?
       render status: :unprocessable_entity, json: {error_messages: ["自分自身をフォローすることはできません"]}
@@ -14,7 +16,7 @@ class Api::V1::RelationshipsController < ApplicationController
 
       render status: :created, json: {
         users: users.map { |user| UserSerializer.new(user).attributes },
-        current_user: UserSerializer.new(current_user).attributes,
+        current_user: UserSerializer.new(acting_user).attributes,
         followed_user: UserSerializer.new(followed_user).attributes
       }
     else
@@ -23,16 +25,16 @@ class Api::V1::RelationshipsController < ApplicationController
   end
 
   def destroy
-    current_user = User.includes(date_spot_reviews: :date_spot, courses: {date_spots: :date_spot_reviews}).find(params[:current_user_id])
+    acting_user = User.includes(date_spot_reviews: :date_spot, courses: {date_spots: :date_spot_reviews}).find(params[:current_user_id])
     unfollowed_user = User.includes(date_spot_reviews: :date_spot, courses: {date_spots: :date_spot_reviews}).find(params[:other_user_id])
-    unfollowing = current_user.unfollow(unfollowed_user)
+    unfollowing = acting_user.unfollow(unfollowed_user)
 
     if unfollowing.destroy
       users = User.includes(:followers, :followings, date_spot_reviews: :date_spot, courses: {date_spots: :date_spot_reviews}).non_admins
 
       render status: :ok, json: {
         users: users.map { |user| UserSerializer.new(user).attributes },
-        current_user: UserSerializer.new(current_user).attributes,
+        current_user: UserSerializer.new(acting_user).attributes,
         unfollowed_user: UserSerializer.new(unfollowed_user).attributes
       }
     else
