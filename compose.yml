@@ -3,8 +3,8 @@ services:
     platform: linux/x86_64
     image: postgres:13
     environment:
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
     volumes:
       - pg-data:/var/lib/postgresql/data
     ports:
@@ -13,12 +13,6 @@ services:
   api:
     build:
       dockerfile: Dockerfile.develop
-    environment:
-      REACT_FRONTEND_DOMAIN: ${REACT_FRONTEND_DOMAIN}
-      GOOGLE_MAP_API_KEY: ${GOOGLE_MAP_API_KEY}
-      POSTGRES_HOST: ${POSTGRES_HOST}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_USER: ${POSTGRES_USER}
     command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
     volumes:
       - .:/date-course-api:cached
