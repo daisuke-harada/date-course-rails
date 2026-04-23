@@ -1,4 +1,5 @@
 class Api::V1::DateSpotsController < ApplicationController
+  before_action :authenticate_user!, only: %i[create update destroy]
   before_action :set_date_spot, only: [:show, :update, :destroy]
 
   def index
