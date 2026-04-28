@@ -26,7 +26,7 @@ class Api::V1::DateSpotsController < ApplicationController
     date_spot_reviews = @date_spot.date_spot_reviews.includes(:user, :date_spot).map { |date_spot_review| DateSpotReviewSerializer.new(date_spot_review, include_user_info: true).attributes }
 
     render status: :ok, json: {
-      address_and_date_spot: DateSpotSerializer.new(@date_spot),
+      date_spot: DateSpotSerializer.new(@date_spot),
       review_average_rate: @date_spot.average_rate_calculation,
       date_spot_reviews: date_spot_reviews
     }
