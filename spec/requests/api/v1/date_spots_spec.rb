@@ -85,11 +85,11 @@ RSpec.describe "Api::V1::DateSpots", type: :request do
     let!(:date_spot_review) { create(:other_date_spot_review) }
     it "date_spot詳細ページを表示する" do
       get "/api/v1/date_spots/#{date_spot.id}"
-      expect(JSON.parse(response.body)["address_and_date_spot"]["name"]).to eq(date_spot.name)
-      expect(JSON.parse(response.body)["address_and_date_spot"]["genre_id"]).to eq(date_spot.genre_id)
-      expect(JSON.parse(response.body)["address_and_date_spot"]["prefecture_name"]).to eq(date_spot.prefecture.name)
-      expect(JSON.parse(response.body)["address_and_date_spot"]["city_name"]).to eq(date_spot.city_name)
-      expect(JSON.parse(response.body)["address_and_date_spot"]["genre_name"]).to eq(Genre.find_by(id: date_spot.genre_id).name)
+      expect(JSON.parse(response.body)["date_spot"]["name"]).to eq(date_spot.name)
+      expect(JSON.parse(response.body)["date_spot"]["genre_id"]).to eq(date_spot.genre_id)
+      expect(JSON.parse(response.body)["date_spot"]["prefecture_name"]).to eq(date_spot.prefecture.name)
+      expect(JSON.parse(response.body)["date_spot"]["city_name"]).to eq(date_spot.city_name)
+      expect(JSON.parse(response.body)["date_spot"]["genre_name"]).to eq(Genre.find_by(id: date_spot.genre_id).name)
       expect(JSON.parse(response.body)["date_spot_reviews"][0]["content"]).to eq(date_spot_review.content)
       expect(JSON.parse(response.body)["review_average_rate"]).to eq(1)
     end
